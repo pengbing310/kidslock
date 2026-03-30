@@ -1,0 +1,69 @@
+workflows:
+  ios-app:
+    name: iOS App
+    environment:
+      vars:
+        XCODE_WORKSPACE: "KidsLock.xcodeproj"
+        XCODE_SCHEME: "KidsLock"
+      xcode: latest
+    scripts:
+      - name: Create Xcode project
+        script: |
+          mkdir -p KidsLock.xcodeproj
+          cat > KidsLock.xcodeproj/project.pbxproj << 'EOF'
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+		/* Begin PBXFileReference section */
+		13B07F961A680F5B00A75B9A /* KidsLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KidsLock.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		/* End PBXFileReference section */
+		/* Begin PBXGroup section */
+		13B07F951A680F5B00A75B9A = {
+			isa = PBXGroup;
+			children = (
+				13B07F961A680F5B00A75B9A /* KidsLock.app */,
+			);
+			sourceTree = "<group>";
+		};
+		/* End PBXGroup section */
+		/* Begin PBXProject section */
+		13B07F941A680F5B00A75B9A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1430;
+				LastUpgradeCheck = 1430;
+			};
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXProject "KidsLock" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 13B07F951A680F5B00A75B9A;
+			productRefGroup = 13B07F951A680F5B00A75B9A;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+			);
+		};
+		/* End PBXProject section */
+	};
+	rootObject = 13B07F941A680F5B00A75B9A /* Project object */;
+}
+EOF
+      - name: Build iOS app
+        script: |
+          xcodebuild build \
+            -project "$XCODE_WORKSPACE" \
+            -scheme "$XCODE_SCHEME" \
+            -sdk iphoneos \
+            -configuration Release \
+            CODE_SIGNING_ALLOWED=NO
+    artifacts:
+      - build/Release-iphoneos/*.app
