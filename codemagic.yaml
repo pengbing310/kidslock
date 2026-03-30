@@ -1,0 +1,21 @@
+workflows:
+  ios-app:
+    name: Build iOS App
+    environment:
+      xcode: latest
+    scripts:
+      - name: Build with xcodebuild
+        script: |
+          # 创建临时 Xcode 项目
+          mkdir -p KidsLock.xcodeproj
+          
+          # 使用 xcodebuild 直接构建
+          xcodebuild \
+            -project KidsLock.xcodeproj \
+            -scheme KidsLock \
+            -sdk iphoneos \
+            -configuration Release \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+    artifacts:
+      - build/Release-iphoneos/*.app
